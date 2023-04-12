@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import '../App.css';
-import { UUID, pseudoRandomBytes } from 'crypto';
+import { useEffect, useState } from 'react'
+import { UUID } from 'crypto';
 import Card from './card'
+import '../App.css';
 
 interface Fetched {
     data: Data[];
@@ -133,14 +133,14 @@ function Home() {
                 {(data?.statusCode === 400)? <p>{data?.message}</p> : 
                  (data?.data === undefined)? <p>Loading...</p> :
                  (data?.paging.itemCount === 0)? <p> No Items Found</p> :
-                 data?.data.map((a) => (
+                  data?.data.map((a) => (
 
                     <div>
                         <Card id = {a.id}/>
                     </div>
 
                 ))}
-            
+
                 <button onClick={() => setPage((prev) => prev - 1)} 
                         disabled = { (data?.statusCode === 400) || 
                                      (data?.data !== undefined && 
@@ -155,21 +155,28 @@ function Home() {
                 
             </div>
 
-            <div className='filter-container'>
-            <h3>{total}</h3>
+                
 
-                <input type="checkbox" checked={housing} onChange={()=>{housingToggle(!housing); setPage(1)}} ></input>
-                <p>Housing</p>
-                <input type="checkbox" checked={food} onChange={()=> {foodToggle(!food); setPage(1)}} ></input>
-                <p>Food</p>
-                <input type="checkbox" checked={transportation} onChange={()=> {transportationToggle(!transportation); setPage(1)}} ></input>
-                <p>Transportation</p>
-                <input type="checkbox" checked={personal} onChange={()=> {personalToggle(!personal); setPage(1)}} ></input>
-                <p>Personal Spending</p>
-                <form>
-                    <input onChange = {handleChangeMin} value={filterMin}></input>
-                    <input onChange = {handleChangeMax} value={filterMax}></input>
-                </form>
+            <div className='filter-container'>
+
+                <div className='total'>
+                    <h3>{total}</h3>
+                </div>
+
+                <div className='filter'>
+                    <input type="checkbox" checked={housing} onChange={()=>{housingToggle(!housing); setPage(1)}} ></input>
+                    <p>Housing</p>
+                    <input type="checkbox" checked={food} onChange={()=> {foodToggle(!food); setPage(1)}} ></input>
+                    <p>Food</p>
+                    <input type="checkbox" checked={transportation} onChange={()=> {transportationToggle(!transportation); setPage(1)}} ></input>
+                    <p>Transportation</p>
+                    <input type="checkbox" checked={personal} onChange={()=> {personalToggle(!personal); setPage(1)}} ></input>
+                    <p>Personal Spending</p>
+                    <form>
+                        <input onChange = {handleChangeMin} value={filterMin}></input>
+                        <input onChange = {handleChangeMax} value={filterMax}></input>
+                    </form>
+                </div>
                 
             </div>
 

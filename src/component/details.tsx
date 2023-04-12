@@ -33,12 +33,14 @@ const Details = (): JSX.Element => {
     },[])
 
     return(
-        <div>
-            <p>{data?.category.name}</p>
-            <p>{data?.name}</p>
-            <p>${data?.amount}</p>
-            <p>{data?.description}</p>
-            <button onClick={() => navigate(-1)}>back</button>
+        <div className='container'>
+            <div className="details">
+                <p>{data?.category.name}</p>
+                <p>{data?.name}</p>
+                <p>${data?.amount}</p>
+                <p>{data?.description}</p>
+                <button onClick={() => navigate(-1)}>back</button>
+            </div>
         </div>
     )
 }

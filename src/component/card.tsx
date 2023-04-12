@@ -55,7 +55,7 @@ const Card = ({id}:any): JSX.Element => {
             </div>
 
             <div className='amount'>
-                <p>${data?.amount}</p>
+                <p>{data?.amount}</p>
             </div>
         </div>  
     )
