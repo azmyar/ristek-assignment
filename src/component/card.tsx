@@ -12,6 +12,8 @@ interface Data {
 
 const Card = ({id}:any): JSX.Element => {
 
+    const navigate = useNavigate()
+
     const [data, setData] = useState<Data>()
 
     const fetchData = (): void => {
@@ -28,18 +30,16 @@ const Card = ({id}:any): JSX.Element => {
         fetchData()
     },[id])
 
-    const navigate = useNavigate();
-
     const openDetails = (id: string) => {
-        navigate('/details',{state:{id:id}});
+        navigate(`/details/${id}`);
     }
-
+    
     return(
-            <div className='card' onClick={() => openDetails(id)}>
-                <p>{data?.category.name}</p>
-                <p>{data?.name}</p>
-                <p>${data?.amount}</p>
-            </div>
+        <div className='card' onClick={() => openDetails(id)}>
+            <p>{data?.category.name}</p>
+            <p>{data?.name}</p>
+            <p>${data?.amount}</p>
+        </div>  
     )
 
 }

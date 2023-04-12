@@ -1,5 +1,5 @@
 import {useEffect, useState } from 'react'
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import '../App.css';
 
 interface Data {
@@ -11,14 +11,15 @@ interface Data {
     description: string
 }
 
-const Details = ({id}:any): JSX.Element => {
-    const location = useLocation();
+const Details = (): JSX.Element => {
+    const params = useParams();
+
     const navigate = useNavigate();
 
     const [data, setData] = useState<Data>()
 
     const fetchData = (): void => {
-        fetch(`https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/${location.state.id}`)
+        fetch(`https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/${params.id}`)
         .then(response => {
             return response.json()
         })
@@ -29,11 +30,7 @@ const Details = ({id}:any): JSX.Element => {
 
     useEffect(()=>{
         fetchData()
-    },[id])
-
-    const back = () => {
-        navigate('/',{});
-    }
+    },[])
 
     return(
         <div>
@@ -41,7 +38,7 @@ const Details = ({id}:any): JSX.Element => {
             <p>{data?.name}</p>
             <p>${data?.amount}</p>
             <p>{data?.description}</p>
-            <button onClick={() => back()}>back</button>
+            <button onClick={() => navigate(-1)}>back</button>
         </div>
     )
 }
