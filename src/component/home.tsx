@@ -1,7 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import { UUID } from 'crypto';
+import amount from "../icons/Amount.png"
 import Card from './card'
+import food_icon from "../icons/Food.png"
+import transport_icon from "../icons/Transport.png"
+import housing_icon from "../icons/Housing.png"
+import personal_icon from "../icons/Personal.png"
+import filter_icon from "../icons/Filter.png"
+import range_icon from "../icons/Range.png"
 import '../App.css';
 
 interface Fetched {
@@ -30,7 +37,7 @@ function Home() {
     const navigate = useNavigate()
 
     const [data, setData] = useState<Fetched>()
-    const [total, setTotal] = useState<number>()
+    const [total, setTotal] = useState<number>(0)
     const [page, setPage] = useState<number>(0)
     const [filterMin, setFilterMin] = useState<number>(0)
     const [filterMax, setFilterMax] = useState<number>(0)
@@ -128,6 +135,7 @@ function Home() {
 
     return (
         <div className='container'>
+
             <div className='card-container'>
                 
                 {(data?.statusCode === 400)? <p>{data?.message}</p> : 
@@ -141,40 +149,92 @@ function Home() {
 
                 ))}
 
-                <button onClick={() => setPage((prev) => prev - 1)} 
-                        disabled = { (data?.statusCode === 400) || 
-                                     (data?.data !== undefined && 
-                                     !data?.paging.hasPreviousPage)}>Prev Page
-                </button>
+                <div className='pagination-container'>
+                    <button onClick={() => setPage((prev) => prev - 1)} 
+                            disabled = { (data?.statusCode === 400) || 
+                                        (data?.data !== undefined && 
+                                        !data?.paging.hasPreviousPage)}>Prev Page
+                    </button>
 
-                <button onClick={() => setPage((prev) => prev + 1)} 
-                        disabled={ (data?.statusCode === 400) || 
-                                   (data?.data !== undefined && 
-                                   !data?.paging.hasNextPage)}>Next Page
-                </button>
+                    <button onClick={() => setPage((prev) => prev + 1)} 
+                            disabled={ (data?.statusCode === 400) || 
+                                    (data?.data !== undefined && 
+                                    !data?.paging.hasNextPage)}>Next Page
+                    </button>
+                </div>
                 
             </div>
-
-                
 
             <div className='filter-container'>
 
                 <div className='total'>
-                    <h3>{total}</h3>
+                    <p className='expenses-title'>Current Expenses</p>
+                    <div className='expenses-container'>  
+                        <img src={amount} alt="food-icon" className='amount-icon'></img>                  
+                        <p className='expenses'>{total.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
+                    </div>
                 </div>
 
                 <div className='filter'>
-                    <input type="checkbox" checked={housing} onChange={()=>{housingToggle(!housing); setPage(1)}} ></input>
+                    <div className="filter-title-container">
+                        <img src={filter_icon} alt="filter-icon" className='filter-icon'></img>
+                        <p className='filter-title'>Filters</p>
+                    </div>
+
+                    <p className='filter-subtitle'>Filter by Transaction Category</p>
+
+                    <div className="category">
+                    <input type="checkbox" className = "input" checked={housing} onChange={()=>{housingToggle(!housing); setPage(1)}} ></input>
+                    <img src={housing_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Housing</p>
-                    <input type="checkbox" checked={food} onChange={()=> {foodToggle(!food); setPage(1)}} ></input>
+                    </div>
+
+                    <div className="category">
+                    <input type="checkbox"className = "input"  checked={food} onChange={()=> {foodToggle(!food); setPage(1)}} ></input>
+                    <img src={food_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Food</p>
-                    <input type="checkbox" checked={transportation} onChange={()=> {transportationToggle(!transportation); setPage(1)}} ></input>
+                    </div>
+
+                    <div className="category">
+                    <input type="checkbox" className = "input" checked={transportation} onChange={()=> {transportationToggle(!transportation); setPage(1)}} ></input>
+                    <img src={transport_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Transportation</p>
-                    <input type="checkbox" checked={personal} onChange={()=> {personalToggle(!personal); setPage(1)}} ></input>
+                    </div>
+
+                    <div className="category">
+                    <input type="checkbox" className = "input" checked={personal} onChange={()=> {personalToggle(!personal); setPage(1)}} ></input>
+                    <img src={personal_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Personal Spending</p>
+                    </div>
+
+                    <hr className='long-line'/>
+
+                    <p className='filter-subtitle'>Filter by Expense Range</p>
+
                     <form>
-                        <input onChange = {handleChangeMin} value={filterMin}></input>
-                        <input onChange = {handleChangeMax} value={filterMax}></input>
+                        <div className='range-filter-container'>
+
+                            <div className='range-filter-min'>
+                                <p className='minmax'>Min</p>
+                                <div className="range-filter">
+                                    <img src={range_icon} alt="filter-icon" className='range-icon'></img>
+                                    <input className='range-input' onChange = {handleChangeMin} value={filterMin}></input>
+                                </div>
+                            </div>
+
+                            <div className="line-container">
+                                <hr className='short-line'/>
+                            </div>
+
+                            <div className='range-filter-max'>
+                                <p className='minmax'>Max</p>
+                                <div className="range-filter">
+                                    <img src={range_icon} alt="filter-icon" className='range-icon'></img>
+                                    <input className='range-input' onChange = {handleChangeMax} value={filterMax}></input>
+                                </div>
+                            </div>
+
+                        </div>
                     </form>
                 </div>
                 

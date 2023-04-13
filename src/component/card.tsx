@@ -5,6 +5,7 @@ import food from "../icons/Food.png"
 import transport from "../icons/Transport.png"
 import housing from "../icons/Housing.png"
 import personal from "../icons/Personal.png"
+import amount from "../icons/Amount.png"
 
 interface Data {
     id: string;
@@ -40,22 +41,23 @@ const Card = ({id}:any): JSX.Element => {
     
     return(
         <div className='card' onClick={() => openDetails(id)}>
-            <div>
+            <div className='card-icon-container'>
                 {
-                (data?.category.name === "Food")? <img src={food} alt="food-icon"></img> :
-                (data?.category.name === "Housing")? <img src={housing} alt="housing-icon"></img> :
-                (data?.category.name === "Transportation")? <img src={transport} alt="transportation-icon"></img> :
-                (data?.category.name === "Personal Spending")? <img src={personal} alt="personal-icon"></img> : ""
+                (data?.category.name === "Food")? <img src={food} alt="food-icon" className='card-icon'></img> :
+                (data?.category.name === "Housing")? <img src={housing} alt="housing-icon" className='card-icon'></img> :
+                (data?.category.name === "Transportation")? <img src={transport} alt="transportation-icon" className='card-icon'></img> :
+                (data?.category.name === "Personal Spending")? <img src={personal} alt="personal-icon" className='card-icon'></img> : ""
                 }
             </div>
 
-            <div>
-                <p>{data?.category.name}</p>
-                <p>{data?.name}</p>
+            <div className='card-name-container'>
+                <p className='category-name' >{data?.category.name}</p>
+                <p className='name' >{data?.name}</p>
             </div>
 
             <div className='amount'>
-                <p>{data?.amount}</p>
+                <img src={amount} alt="food-icon" className='amount-icon'></img>
+                <p>{data?.amount.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
             </div>
         </div>  
     )
