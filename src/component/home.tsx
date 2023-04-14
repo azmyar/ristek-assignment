@@ -1,14 +1,16 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import { UUID } from 'crypto';
+
 import amount from "../icons/Amount.png"
-import Card from './card'
 import food_icon from "../icons/Food.png"
 import transport_icon from "../icons/Transport.png"
 import housing_icon from "../icons/Housing.png"
 import personal_icon from "../icons/Personal.png"
 import filter_icon from "../icons/Filter.png"
 import range_icon from "../icons/Range.png"
+
+import Card from './card'
 import '../App.css';
 
 interface Fetched {
@@ -27,6 +29,7 @@ interface Data {
 
 interface Paging {
     itemCount: number;
+    pageCount: number;
     hasPreviousPage: boolean;
     hasNextPage: boolean
 }
@@ -68,8 +71,6 @@ function Home() {
             endpoint = endpoint.slice(0, endpoint.length - 1)
         }
         
-        console.log(endpoint)
-
         fetch(endpoint)
         .then(response => {
             return response.json()
@@ -91,7 +92,7 @@ function Home() {
                 personalToggle(params.personal === "true")
                 housingToggle(params.housing === "true")
         } else {
-            navigate(`/1/0/0/false/false/false/false`) // Default URL
+            navigate(`/page/1&min_price/0&max_price/0&food/false&transport/false&personal/false&housing/false`) // Default URL
             setPage(1)
             setFilterMin(0)
             setFilterMax(0)
@@ -116,10 +117,12 @@ function Home() {
 
     const handleChangeMin = ({currentTarget: input}: any) => {
         setFilterMin(input.value)
+        setPage(1)
     }
     
     const handleChangeMax = ({currentTarget: input}: any) => {
         setFilterMax(input.value)
+        setPage(1)
     }
 
     useEffect(() => {
@@ -129,15 +132,75 @@ function Home() {
 
     useEffect(() => {
         if (page !== 0 && filterMin.toString() !== "" && filterMax.toString() !== ""){
-            navigate(`/${page}/${filterMin}/${filterMax}/${food}/${transportation}/${personal}/${housing}`)
+            navigate(`/page/${page}&min_price/${filterMin}&max_price/${filterMax}&food/${food}&transport/${transportation}&personal/${personal}&housing/${housing}`)
             fetchData()}
     },[page, filterMin, filterMax, food, transportation, personal, housing])
+
+
+    let pagination = []
+
+
+    if ((data?.paging!== undefined) && (data?.paging.pageCount <= 5)){
+
+        for (let index = 1; index <= 5; index++) {
+            pagination.push (
+                <button onClick={() => setPage(index)}>{index}</button>
+            )            
+        }
+
+    } else if ((data?.paging !== undefined) && (data?.paging.pageCount > 5)) {
+
+        if (page <= 3){
+            for (let index = 1; index <= page + 1; index++) {
+                pagination.push (
+                    <button onClick={() => setPage(index)}>{index}</button>
+                )            
+            }
+
+            pagination.push (
+                <div>
+                    <button>...</button>
+                    <button onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
+                </div>
+            ) 
+
+        } else if ( page > data?.paging.pageCount -3) {
+
+            pagination.push (
+                <div>
+                    <button onClick={() => setPage(1)}>1</button>
+                    <button>...</button>
+                    <button onClick={() => setPage(data?.paging.pageCount-3)}>{data?.paging.pageCount-3}</button>
+                    <button onClick={() => setPage(data?.paging.pageCount-2)}>{data?.paging.pageCount-2}</button>
+                    <button onClick={() => setPage(data?.paging.pageCount-1)}>{data?.paging.pageCount-1}</button>
+                    <button onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
+                </div>
+            ) 
+
+        } else {
+
+            pagination.push (
+                <div>
+                    <button onClick={() => setPage(1)}>1</button>
+                    <button>...</button>
+                    <button onClick={() => setPage(page-1)}>{page-1}</button>
+                    <button onClick={() => setPage(page)}>{page}</button>
+                    <button onClick={() => setPage(page+1)}>{page+1}</button>
+                    <button>...</button>
+                    <button onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
+                </div>
+
+            ) 
+        }
+
+    }
 
     return (
         <div className='container'>
 
             <div className='card-container'>
-                
+
+                <div className='card-anchor'>
                 {(data?.statusCode === 400)? <p>{data?.message}</p> : 
                  (data?.data === undefined)? <p>Loading...</p> :
                  (data?.paging.itemCount === 0)? <p> No Items Found</p> :
@@ -148,18 +211,23 @@ function Home() {
                     </div>
 
                 ))}
+                </div>  
 
                 <div className='pagination-container'>
                     <button onClick={() => setPage((prev) => prev - 1)} 
                             disabled = { (data?.statusCode === 400) || 
                                         (data?.data !== undefined && 
-                                        !data?.paging.hasPreviousPage)}>Prev Page
+                                        !data?.paging.hasPreviousPage)}>{"\<"}
                     </button>
+                    
+                    <div className='pagination-divs'>
+                        {pagination} 
+                    </div>
 
                     <button onClick={() => setPage((prev) => prev + 1)} 
                             disabled={ (data?.statusCode === 400) || 
                                     (data?.data !== undefined && 
-                                    !data?.paging.hasNextPage)}>Next Page
+                                    !data?.paging.hasNextPage)}>{"\>"}
                     </button>
                 </div>
                 
@@ -171,7 +239,7 @@ function Home() {
                     <p className='expenses-title'>Current Expenses</p>
                     <div className='expenses-container'>  
                         <img src={amount} alt="food-icon" className='amount-icon'></img>                  
-                        <p className='expenses'>{total.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
+                        <p className='expenses'>{total?.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
                     </div>
                 </div>
 

@@ -1,7 +1,7 @@
 import './App.css'
 import Home from './component/home'
 import Details from './component/details'
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
 
@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<Home/>} />
-            <Route path="/:page/:min_price/:max_price/:food/:transport/:personal/:housing" element={<Home/>} />
+            <Route path="/page/:page&min_price/:min_price&max_price/:max_price&food/:food&transport/:transport&personal/:personal&housing/:housing" element={<Home/>} />
             <Route path="/details/:id" element={<Details/>} />
         </Routes>
     </BrowserRouter>

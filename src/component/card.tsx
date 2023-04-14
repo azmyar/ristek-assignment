@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import '../App.css';
-import { useNavigate} from "react-router-dom";
 import food from "../icons/Food.png"
 import transport from "../icons/Transport.png"
 import housing from "../icons/Housing.png"
@@ -17,8 +16,6 @@ interface Data {
 
 const Card = ({id}:any): JSX.Element => {
 
-    const navigate = useNavigate()
-
     const [data, setData] = useState<Data>()
 
     const fetchData = (): void => {
@@ -34,31 +31,29 @@ const Card = ({id}:any): JSX.Element => {
     useEffect(()=>{
         fetchData()
     },[id])
-
-    const openDetails = (id: string) => {
-        navigate(`/details/${id}`);
-    }
     
     return(
-        <div className='card' onClick={() => openDetails(id)}>
-            <div className='card-icon-container'>
-                {
-                (data?.category.name === "Food")? <img src={food} alt="food-icon" className='card-icon'></img> :
-                (data?.category.name === "Housing")? <img src={housing} alt="housing-icon" className='card-icon'></img> :
-                (data?.category.name === "Transportation")? <img src={transport} alt="transportation-icon" className='card-icon'></img> :
-                (data?.category.name === "Personal Spending")? <img src={personal} alt="personal-icon" className='card-icon'></img> : ""
-                }
-            </div>
+        <div className='card'>
+            <a href={`/details/${id}`}>
+                <div className='card-icon-container'>
+                    {
+                    (data?.category.name === "Food")? <img src={food} alt="food-icon" className='card-icon'></img> :
+                    (data?.category.name === "Housing")? <img src={housing} alt="housing-icon" className='card-icon'></img> :
+                    (data?.category.name === "Transportation")? <img src={transport} alt="transportation-icon" className='card-icon'></img> :
+                    (data?.category.name === "Personal Spending")? <img src={personal} alt="personal-icon" className='card-icon'></img> : ""
+                    }
+                </div>
 
-            <div className='card-name-container'>
-                <p className='category-name' >{data?.category.name}</p>
-                <p className='name' >{data?.name}</p>
-            </div>
+                <div className='card-name-container'>
+                    <p className='category-name' >{data?.category.name}</p>
+                    <p className='name' >{data?.name}</p>
+                </div>
 
-            <div className='amount'>
-                <img src={amount} alt="food-icon" className='amount-icon'></img>
-                <p>{data?.amount.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
-            </div>
+                <div className='amount'>
+                    <img src={amount} alt="food-icon" className='amount-icon'></img>
+                    <p>{data?.amount.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
+                </div>
+            </a>
         </div>  
     )
 
