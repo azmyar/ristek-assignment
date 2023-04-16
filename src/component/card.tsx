@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { forwardRef, useRef, useEffect, useState } from 'react'
 import '../App.css';
 import food from "../icons/Food.png"
 import transport from "../icons/Transport.png"
@@ -14,12 +14,12 @@ interface Data {
     category: {name: string}
 }
 
-const Card = ({id}:any): JSX.Element => {
+const Card = (props: any): JSX.Element => {
 
     const [data, setData] = useState<Data>()
 
     const fetchData = (): void => {
-        fetch(`https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/${id}`)
+        fetch(`https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/${props.id}`)
         .then(response => {
             return response.json()
         })
@@ -30,11 +30,11 @@ const Card = ({id}:any): JSX.Element => {
 
     useEffect(()=>{
         fetchData()
-    },[id])
+    },[props.id])
     
     return(
         <div className='card'>
-            <a href={`/details/${id}`}>
+            <a href={`/details/${props.id}`}>
                 <div className='card-icon-container'>
                     {
                     (data?.category.name === "Food")? <img src={food} alt="food-icon" className='card-icon'></img> :
