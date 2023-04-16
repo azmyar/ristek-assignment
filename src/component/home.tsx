@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import { UUID } from 'crypto';
 
-import amount from "../icons/Amount.png"
+import amount_icon from "../icons/Amount.png"
 import food_icon from "../icons/Food.png"
 import transport_icon from "../icons/Transport.png"
 import housing_icon from "../icons/Housing.png"
@@ -11,7 +11,7 @@ import filter_icon from "../icons/Filter.png"
 import range_icon from "../icons/Range.png"
 
 import Card from './card'
-import '../App.css';
+import '../App.css'
 
 interface Fetched {
     data: Data[];
@@ -39,22 +39,22 @@ function Home() {
     const params = useParams()
     const navigate = useNavigate()
 
-    const [data, setData] = useState<Fetched>()
-    const [total, setTotal] = useState<number>(0)
-    const [page, setPage] = useState<number>(0)
-    const [filterMin, setFilterMin] = useState<number>(0)
-    const [filterMax, setFilterMax] = useState<number>(0)
+    const [data, setData] = useState <Fetched> ()
+    const [total, setTotal] = useState <number> (0)
+    const [page, setPage] = useState <number> (0)
 
-    const [housing, housingToggle] = useState (false)
-    const [food, foodToggle] = useState (false)
-    const [transportation, transportationToggle] = useState (false)
-    const [personal, personalToggle] = useState (false)
+    const [filterMin, setFilterMin] = useState <number> (0)
+    const [filterMax, setFilterMax] = useState <number> (0)
 
+    const [housing, housingToggle] = useState <boolean> (false)
+    const [food, foodToggle] = useState <boolean> (false)
+    const [transportation, transportationToggle] = useState <boolean> (false)
+    const [personal, personalToggle] = useState <boolean> (false)
 
     const fetchData = () => {
 
-        var endpoint = `https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/` + 
-                       `?limit=4&page=${page}&min_price=${filterMin}&max_price=${filterMax}`
+        let endpoint : string = `https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/` + 
+                                `?limit=4&page=${page}&min_price=${filterMin}&max_price=${filterMax}`
 
         if (food || transportation || personal || housing){
             endpoint += '&category_id='
@@ -93,25 +93,18 @@ function Home() {
                 housingToggle(params.housing === "true")
         } else {
             navigate(`/page/1&min_price/0&max_price/0&food/false&transport/false&personal/false&housing/false`) // Default URL
-            setPage(1)
-            setFilterMin(0)
-            setFilterMax(0)
-            foodToggle(false)
-            transportationToggle(false)
-            personalToggle(false)
-            housingToggle(false)
         }
     }
 
     const fetchTotal = () => {
-        var endpoint = `https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/total`
+        let endpoint = `https://utbmu5o3smxuba2iverkgqqj440temhn.lambda-url.ap-southeast-1.on.aws/expenses/total`
 
         fetch(endpoint)
         .then(response => {
             return response.json()
         })
         .then(data => {
-            setTotal(data.total)
+            setTotal(Number(data.total))
         })
     }
 
@@ -140,20 +133,20 @@ function Home() {
     let pagination = []
 
 
-    if ((data?.paging!== undefined) && (data?.paging.pageCount <= 5)){
+    if ((data?.paging!== undefined) && (data?.paging.pageCount <= 6)){
 
-        for (let index = 1; index <= 5; index++) {
+        for (let index = 1; index <= data?.paging.pageCount; index++) {
             pagination.push (
-                <button onClick={() => setPage(index)}>{index}</button>
+                <button style={(page === index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(index)}>{index}</button>
             )            
         }
 
     } else if ((data?.paging !== undefined) && (data?.paging.pageCount > 5)) {
 
-        if (page <= 3){
-            for (let index = 1; index <= page + 1; index++) {
+        if (page <= 4){
+            for (let index = 1; index <= 5; index++) {
                 pagination.push (
-                    <button onClick={() => setPage(index)}>{index}</button>
+                    <button style={(page === index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(index)}>{index}</button>
                 )            
             }
 
@@ -164,16 +157,17 @@ function Home() {
                 </div>
             ) 
 
-        } else if ( page > data?.paging.pageCount -3) {
+        } else if ( page >= data?.paging.pageCount - 3) {
 
             pagination.push (
                 <div>
                     <button onClick={() => setPage(1)}>1</button>
                     <button>...</button>
-                    <button onClick={() => setPage(data?.paging.pageCount-3)}>{data?.paging.pageCount-3}</button>
-                    <button onClick={() => setPage(data?.paging.pageCount-2)}>{data?.paging.pageCount-2}</button>
-                    <button onClick={() => setPage(data?.paging.pageCount-1)}>{data?.paging.pageCount-1}</button>
-                    <button onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
+                    <button style={(page === data?.paging.pageCount-4) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(data?.paging.pageCount-4)}>{data?.paging.pageCount-4}</button>
+                    <button style={(page === data?.paging.pageCount-3) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(data?.paging.pageCount-3)}>{data?.paging.pageCount-3}</button>
+                    <button style={(page === data?.paging.pageCount-2) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(data?.paging.pageCount-2)}>{data?.paging.pageCount-2}</button>
+                    <button style={(page === data?.paging.pageCount-1) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(data?.paging.pageCount-1)}>{data?.paging.pageCount-1}</button>
+                    <button style={(page === data?.paging.pageCount) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
                 </div>
             ) 
 
@@ -184,15 +178,13 @@ function Home() {
                     <button onClick={() => setPage(1)}>1</button>
                     <button>...</button>
                     <button onClick={() => setPage(page-1)}>{page-1}</button>
-                    <button onClick={() => setPage(page)}>{page}</button>
+                    <button style ={{borderColor: "#4200FF", color:"#4200FF"}} onClick={() => setPage(page)}>{page}</button>
                     <button onClick={() => setPage(page+1)}>{page+1}</button>
                     <button>...</button>
                     <button onClick={() => setPage(data?.paging.pageCount)}>{data?.paging.pageCount}</button>
                 </div>
-
             ) 
         }
-
     }
 
     return (
@@ -201,9 +193,9 @@ function Home() {
             <div className='card-container'>
 
                 <div className='card-anchor'>
-                {(data?.statusCode === 400)? <p>{data?.message}</p> : 
-                 (data?.data === undefined)? <p>Loading...</p> :
-                 (data?.paging.itemCount === 0)? <p> No Items Found</p> :
+                {(data?.statusCode === 400)? <div className='error-message'>{data?.message}</div> : 
+                 (data?.data === undefined)? <div className='error-message'>Loading...</div> :
+                 (data?.paging.itemCount === 0)? <div className='error-message'>No Items Found</div> :
                   data?.data.map((a) => (
 
                     <div>
@@ -211,13 +203,13 @@ function Home() {
                     </div>
 
                 ))}
-                </div>  
+                </div>
 
                 <div className='pagination-container'>
                     <button onClick={() => setPage((prev) => prev - 1)} 
                             disabled = { (data?.statusCode === 400) || 
-                                        (data?.data !== undefined && 
-                                        !data?.paging.hasPreviousPage)}>{"\<"}
+                                         (data?.data !== undefined && 
+                                         !data?.paging.hasPreviousPage)}>{"\<"}
                     </button>
                     
                     <div className='pagination-divs'>
@@ -238,8 +230,8 @@ function Home() {
                 <div className='total'>
                     <p className='expenses-title'>Current Expenses</p>
                     <div className='expenses-container'>  
-                        <img src={amount} alt="food-icon" className='amount-icon'></img>                  
-                        <p className='expenses'>{total?.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
+                        <img src={amount_icon} alt="food-icon" className='amount-icon'></img>                  
+                        <p className='expenses'>{total.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
                     </div>
                 </div>
 
