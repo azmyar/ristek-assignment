@@ -1,5 +1,6 @@
-import {useEffect, useState } from 'react'
-import {useParams} from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { Data } from './home'
+import { useParams } from 'react-router-dom';
 
 import food from "../icons/Food.png"
 import transport from "../icons/Transport.png"
@@ -9,16 +10,8 @@ import amount from "../icons/Amount.png"
 
 import '../App.css';
 
-interface Data {
-    id: string;
-    name: string; 
-    amount: number; 
-    created_at: string; 
-    category: {name: string}
-    description: string
-}
-
 const Details = (): JSX.Element => {
+    
     const params = useParams();
 
     const [data, setData] = useState<Data>()
@@ -37,33 +30,32 @@ const Details = (): JSX.Element => {
         fetchData()
     },[])
 
+    let time : string = ""
+    let desc : string = ""
 
     if (data?.created_at !== undefined){
-        const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        const m = new Date(data?.created_at)
 
-        var t = new Date(data?.created_at)
-
-        var time = t.getUTCDate() + " " + month[t.getUTCMonth()] + " " + t.getUTCFullYear() + ", " + ("0" + t.getUTCHours()).slice(-2) + ":" + ("0" + t.getUTCMinutes()).slice(-2) + " WIB"
-
-    } else {
-        var time = ""
-    }
+        time = m.getUTCDate() + " " + months[m.getUTCMonth()] + " " + m.getUTCFullYear() + ", " + 
+               ("0" + m.getUTCHours()).slice(-2) + ":" + ("0" + m.getUTCMinutes()).slice(-2) + " WIB"
+    } 
 
     if (data?.description !== undefined){
-        var d = data?.description.split(".")
-        var desc = d[0] + ". " + d[1] + "."
-    } else {
-        var desc = ""
-    }
+        const d = data?.description.split(".")
+        desc = d[0] + ". " + d[1] + "."
+    } 
 
     return(
         <div className='container'>
             <div className='subcontainer'>
+
                 <div className="back">
                     <a href="javascript:history.back()">
                         {"\u2190 Back"}
                     </a>
                 </div>
+
                 <div className="details">
                     <div className='details-title'>
 
@@ -110,9 +102,8 @@ const Details = (): JSX.Element => {
                         <p className='details-subtitle'>Notes</p>
                         <p className='description-data'>{desc}</p>
                     </div>
-
-
                 </div>
+
             </div>
         </div>
     )

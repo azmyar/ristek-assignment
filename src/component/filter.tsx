@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ChangeEventHandler } from 'react';
 import '../App.css';
 
 import amount_icon from "../icons/Amount.png"
@@ -9,7 +9,22 @@ import personal_icon from "../icons/Personal.png"
 import filter_icon from "../icons/Filter.png"
 import range_icon from "../icons/Range.png"
 
-const Filter = (props: any): JSX.Element => {
+interface filterProps {
+    total : number;
+    filterMin : number;
+    filterMax : number;
+    housing : boolean;
+    food : boolean;
+    transportation : boolean;
+    personal : boolean;
+    functHousing : Function;
+    functFood : Function;
+    functTransport : Function;
+    functPersonal : Function  
+    rangeFilter : ChangeEventHandler<HTMLInputElement>;
+}
+
+const Filter = (props: filterProps): JSX.Element => {
 
     return(
         <div className='filter-container'>
@@ -31,25 +46,25 @@ const Filter = (props: any): JSX.Element => {
                     <p className='filter-subtitle'>Filter by Transaction Category</p>
 
                     <div className="category">
-                    <input type="checkbox" className = "input" checked={props.filter.housing} onChange={()=>{props.filter.functHousing()}} ></input>
+                    <input type="checkbox" className = "input" checked={props.housing} onChange={()=>{props.functHousing()}} ></input>
                     <img src={housing_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Housing</p>
                     </div>
 
                     <div className="category">
-                    <input type="checkbox"className = "input"  checked={props.filter.food} onChange={()=> {props.filter.functFood()}} ></input>
+                    <input type="checkbox"className = "input"  checked={props.food} onChange={()=> {props.functFood()}} ></input>
                     <img src={food_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Food</p>
                     </div>
 
                     <div className="category">
-                    <input type="checkbox" className = "input" checked={props.filter.transportation} onChange={()=> {props.filter.functTransport()}} ></input>
+                    <input type="checkbox" className = "input" checked={props.transportation} onChange={()=> {props.functTransport()}} ></input>
                     <img src={transport_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Transportation</p>
                     </div>
 
                     <div className="category">
-                    <input type="checkbox" className = "input" checked={props.filter.personal} onChange={()=> {props.filter.functPersonal()}} ></input>
+                    <input type="checkbox" className = "input" checked={props.personal} onChange={()=> {props.functPersonal()}} ></input>
                     <img src={personal_icon} alt="food-icon" className='category-filter-icon'></img>
                     <p>Personal Spending</p>
                     </div>
@@ -65,7 +80,7 @@ const Filter = (props: any): JSX.Element => {
                                 <p className='minmax'>Min</p>
                                 <div className="range-filter">
                                     <img src={range_icon} alt="filter-icon" className='range-icon'></img>
-                                    <input className='range-input' onChange = {props.filter.functFilterMin} value={props.filter.filterMin}></input>
+                                    <input name = "Min" className='range-input' onChange = {props.rangeFilter} value={props.filterMin}></input>
                                 </div>
                             </div>
 
@@ -77,12 +92,13 @@ const Filter = (props: any): JSX.Element => {
                                 <p className='minmax'>Max</p>
                                 <div className="range-filter">
                                     <img src={range_icon} alt="filter-icon" className='range-icon'></img>
-                                    <input className='range-input' onChange = {props.filter.functFilterMax} value={props.filter.filterMax}></input>
+                                    <input name = "Max" className='range-input' onChange = {props.rangeFilter} value={props.filterMax}></input>
                                 </div>
                             </div>
 
                         </div>
                     </form>
+                    
                 </div>
                 
             </div>

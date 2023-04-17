@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import { UUID } from 'crypto';  
+import { UUID } from 'crypto'; 
+import '../App.css'
 
 import Card from './card'
 import Pagination from './pagination'
 import Filter from './filter'
-import '../App.css'
 
 interface Fetched {
     data: Data[];
@@ -16,8 +16,10 @@ interface Fetched {
 
 interface Data {
     id: UUID; 
+    name: string;
     amount: number; 
     created_at: string; 
+    description: string;
     category: {name: string}
 }
 
@@ -86,8 +88,9 @@ const Home = () : JSX.Element => {
                 transportationToggle(params.transport === "true")
                 personalToggle(params.personal === "true")
                 housingToggle(params.housing === "true")
-        } else {
-            navigate(`/page/1&min_price/0&max_price/0&food/false&transport/false&personal/false&housing/false`) // Default URL
+        }
+        else {
+            navigate(`/page/1&min_price/0&max_price/0&food/false&transport/false&personal/false&housing/false`)
             setPage(1)
         }
     }
@@ -104,13 +107,14 @@ const Home = () : JSX.Element => {
         })
     }
 
-    const handleChangeMin = ({currentTarget: input}: any) => {
-        setFilterMin(input.value)
-        setPage(1)
-    }
+    const rangeFilter = ({currentTarget: input}: any) => {
 
-    const handleChangeMax = ({currentTarget: input}: any) => {
-        setFilterMax(input.value)
+        if (input.name === "Min"){
+            setFilterMin(input.value)
+        } 
+        else if (input.name === "Max") {
+            setFilterMax(input.value)
+        }
         setPage(1)
     }
 
@@ -118,21 +122,45 @@ const Home = () : JSX.Element => {
 
         if (category === "Housing"){
             housingToggle(!housing)   
-        } else if (category === "Food"){
+        } 
+        else if (category === "Food"){
             foodToggle(!food)
-        } else if (category === "Transport"){
+        } 
+        else if (category === "Transport"){
             transportationToggle(!transportation)        
-        } else if (category === "Personal"){
+        } 
+        else if (category === "Personal"){
             personalToggle(!personal)        
         }
         setPage(1)
+    }
+
+    const filterProps = {
+        total : total,
+        filterMin : filterMin,
+        filterMax : filterMax,
+        housing : housing,
+        food : food,
+        transportation : transportation,
+        personal : personal,
+        rangeFilter : rangeFilter,
+        functHousing : () => categoryFilter("Housing"),
+        functFood : () => categoryFilter("Food"),
+        functTransport : () => categoryFilter("Transport"),
+        functPersonal : () => categoryFilter("Personal")  
+    }
+
+    const paginationProps = {
+        page : page,
+        data : data!,
+        setPage : (page:number) => setPage(page)
     }
 
     useEffect(() => {
         fetchFilter()
         fetchTotal()
     },[])
-
+    
     useEffect(() => {
         if (page !== 0 && filterMin.toString() !== "" && filterMax.toString() !== ""){
             navigate(
@@ -143,52 +171,34 @@ const Home = () : JSX.Element => {
         }
     },[page, filterMin, filterMax, food, transportation, personal, housing])
 
-
-    let filter = {
-        filterMin : filterMin,
-        filterMax : filterMax,
-        housing : housing,
-        food : food,
-        transportation : transportation,
-        personal : personal,
-
-        functFilterMin : handleChangeMin,
-        functFilterMax : handleChangeMax,
-        functHousing : () => categoryFilter("Housing"),
-        functFood : () => categoryFilter("Food"),
-        functTransport : () => categoryFilter("Transport"),
-        functPersonal : () => categoryFilter("Personal")  
-    }
-
-
     return (
         <div className='container'>
 
             <div className='card-container'>
 
                 <div className='card-anchor'>
-                    {(data?.statusCode === 400)? <div className='error-message'>{data?.message}</div> : 
-                     (data?.paging.itemCount === 0)? <div className='error-message'>No Items Found</div> :
-                     (data?.data === undefined)? <div className='error-message'>Loading...</div> :
-                     data?.data.map((a) => (
-
-                        <div>
-                            <Card id = {a.id} data = {data}/>
-                        </div>
-
-                    ))}
+                    {(data?.statusCode === 400)? 
+                        <div className='error-message'>{data?.message}</div> : 
+                     (data?.paging.itemCount === 0)? 
+                        <div className='error-message'>No Items Found</div> :
+                     (data?.data === undefined)? 
+                        <div className='error-message'>Loading...</div> :
+                     (data?.data.map((a) => (
+                        <Card id = {a.id} data = {data}/>
+                    )))}
                 </div>
 
                 {(data?.data !== undefined && data?.paging.itemCount !== 0)?  
-                <Pagination page = {page} data = {data} setPage = {(r:number) => setPage(r)}/> : 
-                ""}
+                    <Pagination {...paginationProps}/> : null
+                }
     
             </div>
 
-            <Filter total = {total} filter = {filter} />
+            <Filter {...filterProps} />
 
         </div>
     );
 }
 
+export type { Fetched, Data } 
 export default Home;
