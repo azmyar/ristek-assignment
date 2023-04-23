@@ -32,7 +32,7 @@ const Filter = (props: filterProps): JSX.Element => {
                 <div className='total'>
                     <p className='expenses-title'>Current Expenses</p>
                     <div className='expenses-container'>  
-                        <img src={amount_icon} alt="food-icon" className='amount-icon'></img>                  
+                        <img src={amount_icon} alt="food-icon" className='amount-icon-filter'></img>                  
                         <p className='expenses'>{props.total.toLocaleString("id-ID", {minimumFractionDigits:2})}</p>
                     </div>
                 </div>
@@ -44,34 +44,38 @@ const Filter = (props: filterProps): JSX.Element => {
                     </div>
 
                     <p className='filter-subtitle'>Filter by Transaction Category</p>
+                    <p className='filter-subtitle-tab'>Category</p>
 
-                    <div className="category">
-                    <input type="checkbox" className = "input" checked={props.housing} onChange={()=>{props.functHousing()}} ></input>
-                    <img src={housing_icon} alt="food-icon" className='category-filter-icon'></img>
-                    <p>Housing</p>
-                    </div>
+                    <div className='category-wrapper'>
+                        <div className="category">
+                            <input type="checkbox" className = "input" checked={props.housing} onChange={()=>{props.functHousing()}} ></input>
+                            <img src={housing_icon} alt="food-icon" className='category-filter-icon'></img>
+                            <p className='category-name-small' >Housing</p>
+                        </div>
 
-                    <div className="category">
-                    <input type="checkbox"className = "input"  checked={props.food} onChange={()=> {props.functFood()}} ></input>
-                    <img src={food_icon} alt="food-icon" className='category-filter-icon'></img>
-                    <p>Food</p>
-                    </div>
+                        <div className="category">
+                            <input type="checkbox"className = "input"  checked={props.food} onChange={()=> {props.functFood()}} ></input>
+                            <img src={food_icon} alt="food-icon" className='category-filter-icon'></img>
+                            <p className='category-name-small'>Food</p>
+                        </div>
 
-                    <div className="category">
-                    <input type="checkbox" className = "input" checked={props.transportation} onChange={()=> {props.functTransport()}} ></input>
-                    <img src={transport_icon} alt="food-icon" className='category-filter-icon'></img>
-                    <p>Transportation</p>
-                    </div>
+                        <div className="category">
+                            <input type="checkbox" className = "input" checked={props.transportation} onChange={()=> {props.functTransport()}} ></input>
+                            <img src={transport_icon} alt="food-icon" className='category-filter-icon'></img>
+                            <p className='category-name-small'>Transportation</p>
+                        </div>
 
-                    <div className="category">
-                    <input type="checkbox" className = "input" checked={props.personal} onChange={()=> {props.functPersonal()}} ></input>
-                    <img src={personal_icon} alt="food-icon" className='category-filter-icon'></img>
-                    <p>Personal Spending</p>
+                        <div className="category">
+                            <input type="checkbox" className = "input" checked={props.personal} onChange={()=> {props.functPersonal()}} ></input>
+                            <img src={personal_icon} alt="food-icon" className='category-filter-icon'></img>
+                            <p className='category-name-small'>Personal Spending</p>
+                        </div>
                     </div>
 
                     <hr className='long-line'/>
 
                     <p className='filter-subtitle'>Filter by Expense Range</p>
+                    <p className='filter-subtitle-tab'>Range</p>
 
                     <form>
                         <div className='range-filter-container'>

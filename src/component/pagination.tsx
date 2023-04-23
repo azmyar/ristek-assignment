@@ -11,8 +11,6 @@ const Pagination = (props: paginationProps): JSX.Element => {
     
     let pagination = []
 
-    if (props.data.paging !== undefined){
-
         if (props.data.paging.pageCount <= 7){
 
             for (let index = 1; index <= props.data.paging.pageCount; index++) {
@@ -30,8 +28,8 @@ const Pagination = (props: paginationProps): JSX.Element => {
 
                 for (let index = 1; index <= 5; index++) {
                     pagination.push (
-                        <button style={(props.page === index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} 
-                                onClick={() => props.setPage(index)}>
+                        <button style = {(props.page === index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} 
+                                onClick = {() => props.setPage(index)}>
                                     {index}
                         </button>
                     )            
@@ -40,7 +38,7 @@ const Pagination = (props: paginationProps): JSX.Element => {
                 pagination.push (
                     <div>
                         <button>...</button>
-                        <button onClick={() => props.setPage(props.data?.paging.pageCount)}>
+                        <button onClick = {() => props.setPage(props.data?.paging.pageCount)}>
                             {props.data?.paging.pageCount}
                         </button>
                     </div>
@@ -50,15 +48,15 @@ const Pagination = (props: paginationProps): JSX.Element => {
 
                 pagination.push (
                     <div>
-                        <button onClick={() => props.setPage(1)}>1</button>
+                        <button onClick = {() => props.setPage(1)}>1</button>
                         <button>...</button>
                     </div>
                 ) 
 
                 for (let index = 4; index >= 0; index--) {
                     pagination.push (
-                        <button style={(props.page === props.data?.paging.pageCount-index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} 
-                                onClick={() => props.setPage(props.data?.paging.pageCount-index)}>
+                        <button style = {(props.page === props.data?.paging.pageCount-index) ? {borderColor:"#4200FF", color:"#4200FF"}: {}} 
+                                onClick = {() => props.setPage(props.data?.paging.pageCount-index)}>
                                     {props.data?.paging.pageCount-index}
                         </button>
                     )            
@@ -68,38 +66,34 @@ const Pagination = (props: paginationProps): JSX.Element => {
 
                 pagination.push (
                     <div>
-                        <button onClick={() => props.setPage(1)}>1</button>
+                        <button onClick = {() => props.setPage(1)}>1</button>
                         <button>...</button>
-                        <button onClick={() => props.setPage(props.page-1)}>{props.page-1}</button>
-                        <button style ={{borderColor: "#4200FF", color:"#4200FF"}} 
-                                onClick={() => props.setPage(props.page)}>
+                        <button onClick = {() => props.setPage(props.page-1)}>{props.page-1}</button>
+                        <button style = {{borderColor: "#4200FF", color:"#4200FF"}} 
+                                onClick = {() => props.setPage(props.page)}>
                                     {props.page}
                         </button>
-                        <button onClick={() => props.setPage(props.page+1)}>{props.page+1}</button>
+                        <button onClick = {() => props.setPage(props.page+1)}>{props.page+1}</button>
                         <button>...</button>
-                        <button onClick={() => props.setPage(props.data?.paging.pageCount)}>{props.data?.paging.pageCount}</button>
+                        <button onClick = {() => props.setPage(props.data?.paging.pageCount)}>{props.data?.paging.pageCount}</button>
                     </div>
                 ) 
             }
         }
-    }
+
     return(
         <div className='pagination-container'>
                     
-            <button onClick={() => props.setPage((prev:number) => prev - 1)} 
-                    disabled = {(props.data?.statusCode === 400) || 
-                                (props.data?.data !== undefined && 
-                                !props.data?.paging.hasPreviousPage)}>{"\<"}
+            <button onClick = {() => props.setPage((prev:number) => prev - 1)} 
+                    disabled = {!props.data?.paging.hasPreviousPage}>{"<"}
             </button>
             
-            <div className='pagination-divs'>
+            <div className = 'pagination-divs'>
                 {pagination} 
             </div>
 
-            <button onClick={() => props.setPage((prev:number) => prev + 1)} 
-                    disabled={(props.data?.statusCode === 400) || 
-                              (props.data?.data !== undefined && 
-                              !props.data?.paging.hasNextPage)}>{"\>"}
+            <button onClick = {() => props.setPage((prev:number) => prev + 1)} 
+                    disabled = {!props.data?.paging.hasNextPage}>{">"}
             </button>
         </div>
     )

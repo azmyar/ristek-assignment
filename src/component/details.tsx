@@ -43,9 +43,11 @@ const Details = (): JSX.Element => {
 
     if (data?.description !== undefined){
         const d = data?.description.split(".")
-        desc = d[0] + ". " + d[1] + "."
-    } 
-
+        for (let index = 0; index <= 2; index++) {
+            desc += d[index] + ". "
+        }
+    }  
+     
     return(
         <div className='container'>
             <div className='subcontainer'>

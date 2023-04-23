@@ -184,7 +184,7 @@ const Home = () : JSX.Element => {
                      (data?.data === undefined)? 
                         <div className='error-message'>Loading...</div> :
                      (data?.data.map((a) => (
-                        <Card id = {a.id} data = {data}/>
+                        <Card id = {a.id}/>
                     )))}
                 </div>
 

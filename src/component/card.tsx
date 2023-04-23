@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Fetched, Data } from './home'
+import { Data } from './home'
 import { UUID } from 'crypto';
 import '../App.css';
 
@@ -11,7 +11,6 @@ import amount from "../icons/Amount.png"
 
 interface cardProps {
     id: UUID;
-    data: Fetched
 }
 
 const Card = (props: cardProps): JSX.Element => {
